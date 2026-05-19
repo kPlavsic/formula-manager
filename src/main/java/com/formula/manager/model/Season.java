@@ -1,6 +1,7 @@
 package com.formula.manager.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,12 +32,14 @@ public class Season {
     /**
      * Year in which the season takes place.
      */
+    @Min(value = 1950, message = "Season year cannot be before 1950")
     @Column(nullable = false)
     private int year;
 
     /**
      * Total number of races in this season.
      */
+    @Positive(message = "Number of races must be positive")
     @Column(nullable = false)
     private int numberOfRaces;
 
@@ -49,12 +52,14 @@ public class Season {
     /**
      * Start date of the season.
      */
+    @NotNull(message = "Start time cannot be null")
     @Column(nullable = false)
     private LocalDate startTime;
 
     /**
      * Championship this season belongs to.
      */
+    @NotNull(message = "Championship cannot be null")
     @ManyToOne
     @JoinColumn(name = "championship_id", nullable = false)
     private Championship championship;
