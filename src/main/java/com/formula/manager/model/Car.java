@@ -1,6 +1,7 @@
 package com.formula.manager.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,36 +30,43 @@ public class Car {
     /**
      * Model name of the car (e.g. "RB20").
      */
+    @NotBlank(message = "Car model cannot be blank")
+    @Size(min = 2, max = 50, message = "Car model must be between 2 and 50 characters")
     @Column(nullable = false)
     private String model;
 
     /**
      * Engine/motor type used in the car (e.g. "Honda RBPT").
      */
+    @NotBlank(message = "Motor cannot be blank")
     @Column(nullable = false)
     private String motor;
 
     /**
      * Year the car model was manufactured.
      */
+    @Min(value = 1950, message = "Car year cannot be before 1950")
     @Column(nullable = false)
     private int year;
 
     /**
      * Horsepower of the car engine.
      */
+    @Positive(message = "Horsepower must be positive")
     @Column(nullable = false)
     private int horsePower;
 
     /**
      * Weight of the car in kilograms.
      */
+    @Positive(message = "Weight must be positive")
     @Column(nullable = false)
     private double weight;
 
     /**
      * Team this car belongs to.
      */
+    @NotNull(message = "Team cannot be null")
     @ManyToOne
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
