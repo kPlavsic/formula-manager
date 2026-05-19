@@ -1,6 +1,7 @@
 package com.formula.manager.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,30 +30,36 @@ public class Team {
     /**
      * Name of the team (e.g. "Red Bull Racing").
      */
+    @NotBlank(message = "Team name cannot be blank")
+    @Size(min = 3, max = 100, message = "Team name must be between 3 and 100 characters")
     @Column(nullable = false)
     private String name;
 
     /**
      * Country the team represents.
      */
+    @NotBlank(message = "Country cannot be blank")
     @Column(nullable = false)
     private String country;
 
     /**
      * Annual budget of the team in millions.
      */
+    @PositiveOrZero(message = "Budget cannot be negative")
     @Column(nullable = false)
     private double budget;
 
     /**
      * Name of the team principal.
      */
+    @NotBlank(message = "Team principal cannot be blank")
     @Column(nullable = false)
     private String teamPrincipal;
 
     /**
      * Year the team was founded.
      */
+    @Min(value = 1950, message = "Year of forming cannot be before 1950")
     @Column(nullable = false)
     private int yearOfForming;
 
