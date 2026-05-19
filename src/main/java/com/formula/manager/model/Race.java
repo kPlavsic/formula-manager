@@ -1,6 +1,7 @@
 package com.formula.manager.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,30 +32,36 @@ public class Race {
     /**
      * Name of the race (e.g. "Monaco Grand Prix").
      */
+    @NotBlank(message = "Race name cannot be blank")
+    @Size(min = 3, max = 100, message = "Race name must be between 3 and 100 characters")
     @Column(nullable = false)
     private String name;
 
     /**
      * Date when the race begins.
      */
+    @NotNull(message = "Date of beginning cannot be null")
     @Column(nullable = false)
     private LocalDate dateOfBeginning;
 
     /**
      * Date when the race ends.
      */
+    @NotNull(message = "Date of ending cannot be null")
     @Column(nullable = false)
     private LocalDate dateOfEnding;
 
     /**
      * Total number of laps in the race.
      */
+    @Positive(message = "Number of laps must be positive")
     @Column(nullable = false)
     private int numberOfLaps;
 
     /**
      * Season this race belongs to.
      */
+    @NotNull(message = "Season cannot be null")
     @ManyToOne
     @JoinColumn(name = "season_id", nullable = false)
     private Season season;
@@ -62,6 +69,7 @@ public class Race {
     /**
      * Circuit on which this race is held.
      */
+    @NotNull(message = "Circuit cannot be null")
     @ManyToOne
     @JoinColumn(name = "circuit_id", nullable = false)
     private Circuit circuit;
