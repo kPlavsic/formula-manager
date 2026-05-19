@@ -1,6 +1,7 @@
 package com.formula.manager.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,30 +29,36 @@ public class Circuit {
     /**
      * Name of the circuit (e.g. "Monza").
      */
+    @NotBlank(message = "Circuit name cannot be blank")
+    @Size(min = 3, max = 100, message = "Circuit name must be between 3 and 100 characters")
     @Column(nullable = false)
     private String name;
 
     /**
      * Country where the circuit is located.
      */
+    @NotBlank(message = "Country cannot be blank")
     @Column(nullable = false)
     private String country;
 
     /**
      * Length of the circuit in kilometers.
      */
+    @Positive(message = "Circuit length must be positive")
     @Column(nullable = false)
     private double length;
 
     /**
      * Number of turns on the circuit.
      */
+    @Positive(message = "Number of turns must be positive")
     @Column(nullable = false)
     private int numberOfTurns;
 
     /**
      * Maximum spectator capacity of the circuit.
      */
+    @Positive(message = "Capacity must be positive")
     @Column(nullable = false)
     private int capacity;
 }
