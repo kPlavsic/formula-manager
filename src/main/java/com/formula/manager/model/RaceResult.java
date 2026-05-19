@@ -1,6 +1,7 @@
 package com.formula.manager.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,24 +30,28 @@ public class RaceResult {
     /**
      * Final position of the driver in the race (e.g. 1 for first place).
      */
+    @Positive(message = "Position must be positive")
     @Column(nullable = false)
     private int position;
 
     /**
      * Total race time of the driver (e.g. "1:30:25.456").
      */
+    @NotBlank(message = "Time cannot be blank")
     @Column(nullable = false)
     private String time;
 
     /**
      * Championship points earned by the driver in this race.
      */
+    @PositiveOrZero(message = "Points cannot be negative")
     @Column(nullable = false)
     private int points;
 
     /**
      * Driver who achieved this result.
      */
+    @NotNull(message = "Driver cannot be null")
     @ManyToOne
     @JoinColumn(name = "driver_id", nullable = false)
     private Driver driver;
@@ -54,6 +59,7 @@ public class RaceResult {
     /**
      * Race in which this result was achieved.
      */
+    @NotNull(message = "Race cannot be null")
     @ManyToOne
     @JoinColumn(name = "race_id", nullable = false)
     private Race race;
