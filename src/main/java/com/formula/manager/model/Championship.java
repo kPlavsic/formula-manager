@@ -1,6 +1,7 @@
 package com.formula.manager.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,30 +31,36 @@ public class Championship {
     /**
      * Name of the championship (e.g. "Formula 1 World Championship").
      */
+    @NotBlank(message = "Championship name cannot be blank")
+    @Size(min = 3, max = 100, message = "Championship name must be between 3 and 100 characters")
     @Column(nullable = false)
     private String name;
 
     /**
      * Type of the championship (e.g. "Formula 1", "Formula 2").
      */
+    @NotBlank(message = "Championship type cannot be blank")
     @Column(nullable = false)
     private String type;
 
     /**
      * Year in which the championship takes place.
      */
+    @Min(value = 1950, message = "Championship year cannot be before 1950")
     @Column(nullable = false)
     private int year;
 
     /**
      * Total prize money awarded in this championship.
      */
+    @PositiveOrZero(message = "Prize money cannot be negative")
     @Column(nullable = false)
     private double prizeMoney;
 
     /**
      * Name of the organization that organizes the championship.
      */
+    @NotBlank(message = "Organizer cannot be blank")
     @Column(nullable = false)
     private String organizer;
 
