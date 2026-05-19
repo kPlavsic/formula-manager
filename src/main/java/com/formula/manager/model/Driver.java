@@ -1,6 +1,7 @@
 package com.formula.manager.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,42 +32,52 @@ public class Driver {
     /**
      * First name of the driver.
      */
+    @NotBlank(message = "Driver name cannot be blank")
+    @Size(min = 2, max = 50, message = "Driver name must be between 2 and 50 characters")
     @Column(nullable = false)
     private String name;
 
     /**
      * Last name of the driver.
      */
+    @NotBlank(message = "Driver surname cannot be blank")
+    @Size(min = 2, max = 50, message = "Driver surname must be between 2 and 50 characters")
     @Column(nullable = false)
     private String surname;
 
     /**
      * Nationality of the driver (e.g. "Dutch").
      */
+    @NotBlank(message = "Nationality cannot be blank")
     @Column(nullable = false)
     private String nationality;
 
     /**
      * Total championship points accumulated by the driver.
      */
+    @PositiveOrZero(message = "Points cannot be negative")
     @Column(nullable = false)
     private int points;
 
     /**
      * Date of birth of the driver.
      */
+    @NotNull(message = "Date of birth cannot be null")
+    @Past(message = "Date of birth must be in the past")
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
     /**
      * Total number of championships won by the driver.
      */
+    @PositiveOrZero(message = "Number of championships cannot be negative")
     @Column(nullable = false)
     private int numberOfChampionships;
 
     /**
      * Team this driver belongs to.
      */
+    @NotNull(message = "Team cannot be null")
     @ManyToOne
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
