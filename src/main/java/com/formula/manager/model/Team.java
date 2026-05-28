@@ -66,7 +66,10 @@ public class Team {
     /**
      * List of drivers in this team (max 3).
      */
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
     private List<Driver> drivers;
 
     /**

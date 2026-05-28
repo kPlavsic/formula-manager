@@ -1,0 +1,40 @@
+{
+  "championship" : "Formula 1 World Championship",
+  "season" : 2025,
+  "drivers" : [ {
+    "nationality" : "Dutch",
+    "name" : "Max Verstappen",
+    "team" : "Red Bull Racing",
+    "points" : 437
+  }, {
+    "nationality" : "Monegasque",
+    "name" : "Charles Leclerc",
+    "team" : "Scuderia Ferrari",
+    "points" : 356
+  }, {
+    "nationality" : "British",
+    "name" : "Lando Norris",
+    "team" : "Mercedes AMG Petronas",
+    "points" : 332
+  }, {
+    "nationality" : "British",
+    "name" : "Lewis Hamilton",
+    "team" : "Mercedes AMG Petronas",
+    "points" : 315
+  }, {
+    "nationality" : "Spanish",
+    "name" : "Carlos Sainz",
+    "team" : "Scuderia Ferrari",
+    "points" : 290
+  }, {
+    "nationality" : "British",
+    "name" : "George Rusell",
+    "team" : "Mercedes AMG Petronas",
+    "points" : 15
+  }, {
+    "nationality" : "ddsa",
+    "name" : "kri sad",
+    "team" : "Red Bull Racing",
+    "points" : 13
+  } ]
+}

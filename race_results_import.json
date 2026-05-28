@@ -1,0 +1,44 @@
+[
+  {
+    "position": 1,
+    "time": "1:22:33.456",
+    "points": 25,
+    "driver": { "id": 1 },
+    "race": { "id": 2 }
+  },
+  {
+    "position": 2,
+    "time": "1:22:45.123",
+    "points": 18,
+    "driver": { "id": 3 },
+    "race": { "id": 2 }
+  },
+  {
+    "position": 3,
+    "time": "1:22:58.789",
+    "points": 15,
+    "driver": { "id": 4 },
+    "race": { "id": 2 }
+  },
+  {
+    "position": 4,
+    "time": "1:23:10.234",
+    "points": 12,
+    "driver": { "id": 2 },
+    "race": { "id": 2 }
+  },
+  {
+    "position": 5,
+    "time": "1:23:25.567",
+    "points": 10,
+    "driver": { "id": 5 },
+    "race": { "id": 2 }
+  },
+  {
+    "position": 6,
+    "time": "1:23:40.890",
+    "points": 8,
+    "driver": { "id": 6 },
+    "race": { "id": 2 }
+  }
+]

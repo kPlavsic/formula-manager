@@ -3,11 +3,13 @@ package com.formula.manager.service;
 import com.formula.manager.model.Driver;
 import com.formula.manager.model.RaceResult;
 import com.formula.manager.model.Season;
+import com.formula.manager.model.Team;
 import com.formula.manager.repository.DriverRepository;
 import com.formula.manager.repository.RaceResultRepository;
 import com.formula.manager.repository.RaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
@@ -80,13 +82,15 @@ public class DriverService {
      * @throws IllegalArgumentException if driver is null or has no ID
      */
     public void deleteDriver(Driver driver) {
-        if (driver == null) {
-            throw new IllegalArgumentException("Driver cannot be null");
+
+        Driver managedDriver = driverRepository.findById(driver.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Driver not found"));
+
+        Team team = managedDriver.getTeam();
+
+        if (team != null) {
+            team.getDrivers().remove(managedDriver);
         }
-        if (driver.getId() == null) {
-            throw new IllegalArgumentException("Driver must have an ID to be deleted");
-        }
-        driverRepository.delete(driver);
     }
 
     /**
@@ -116,5 +120,14 @@ public class DriverService {
             throw new IllegalArgumentException("Driver cannot be null");
         }
         return raceResultRepository.findByDriver(driver);
+    }
+
+    /**
+     * Retrieves all drivers from the system.
+     *
+     * @return list of all drivers
+     */
+    public List<Driver> getAllDrivers() {
+        return driverRepository.findAll();
     }
 }

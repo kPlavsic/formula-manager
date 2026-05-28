@@ -85,6 +85,6 @@ public class Driver {
     /**
      * List of race results for this driver.
      */
-    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RaceResult> raceResults;
 }
