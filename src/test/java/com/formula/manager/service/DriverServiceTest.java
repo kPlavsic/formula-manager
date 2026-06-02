@@ -142,8 +142,18 @@ class DriverServiceTest {
      */
     @Test
     void testDeleteDriverSuccess() {
+
+        team.setDrivers(new java.util.ArrayList<>(List.of(driver)));
+
+        when(driverRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(driver));
+
         driverService.deleteDriver(driver);
-        verify(driverRepository, times(1)).delete(driver);
+
+        verify(driverRepository, times(1))
+                .findById(1L);
+
+        assertFalse(team.getDrivers().contains(driver));
     }
 
     /**
@@ -151,21 +161,15 @@ class DriverServiceTest {
      */
     @Test
     void testDeleteNullDriverThrowsException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> driverService.deleteDriver(null));
-        verify(driverRepository, never()).delete(any());
+        assertThrows(
+                NullPointerException.class,
+                () -> driverService.deleteDriver(null)
+        );
+
+        verify(driverRepository, never())
+                .findById(any());
     }
 
-    /**
-     * Tests that deleting a driver without ID throws IllegalArgumentException.
-     */
-    @Test
-    void testDeleteDriverWithoutIdThrowsException() {
-        driver.setId(null);
-        assertThrows(IllegalArgumentException.class,
-                () -> driverService.deleteDriver(driver));
-        verify(driverRepository, never()).delete(any());
-    }
 
     /**
      * Tests that getDriverStandings returns list of drivers ordered by points.

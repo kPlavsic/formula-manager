@@ -22,6 +22,28 @@ class ChampionshipTest {
     private Championship championship;
 
     /**
+     * Verifies that a validation violation exists for the specified field
+     * and that the expected validation message is present.
+     *
+     * @param violations validation violations returned by the validator
+     * @param fieldName field expected to contain the violation
+     * @param expectedMessage expected validation message
+     * @param <T> validated object type
+     */
+    private <T> void assertViolation(
+            Set<ConstraintViolation<T>> violations,
+            String fieldName,
+            String expectedMessage) {
+
+        assertTrue(
+                violations.stream().anyMatch(v ->
+                        v.getPropertyPath().toString().equals(fieldName)
+                                && v.getMessage().equals(expectedMessage)
+                )
+        );
+    }
+
+    /**
      * Sets up the validator and a valid championship before each test.
      */
     @BeforeEach
@@ -56,8 +78,14 @@ class ChampionshipTest {
     @Test
     void testNullNameFails() {
         championship.setName(null);
-        Set<ConstraintViolation<Championship>> violations = validator.validate(championship);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Championship>> violations =
+                validator.validate(championship);
+
+        assertViolation(
+                violations,
+                "name",
+                "Championship name cannot be blank");
     }
 
     /**
@@ -66,8 +94,14 @@ class ChampionshipTest {
     @Test
     void testBlankNameFails() {
         championship.setName("");
-        Set<ConstraintViolation<Championship>> violations = validator.validate(championship);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Championship>> violations =
+                validator.validate(championship);
+
+        assertViolation(
+                violations,
+                "name",
+                "Championship name cannot be blank");
     }
 
     /**
@@ -76,8 +110,14 @@ class ChampionshipTest {
     @Test
     void testWhitespaceNameFails() {
         championship.setName("   ");
-        Set<ConstraintViolation<Championship>> violations = validator.validate(championship);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Championship>> violations =
+                validator.validate(championship);
+
+        assertViolation(
+                violations,
+                "name",
+                "Championship name cannot be blank");
     }
 
     /**
@@ -86,8 +126,14 @@ class ChampionshipTest {
     @Test
     void testNameTooShortFails() {
         championship.setName("F1");
-        Set<ConstraintViolation<Championship>> violations = validator.validate(championship);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Championship>> violations =
+                validator.validate(championship);
+
+        assertViolation(
+                violations,
+                "name",
+                "Championship name must be between 3 and 100 characters");
     }
 
     /**
@@ -96,8 +142,14 @@ class ChampionshipTest {
     @Test
     void testNameTooLongFails() {
         championship.setName("A".repeat(101));
-        Set<ConstraintViolation<Championship>> violations = validator.validate(championship);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Championship>> violations =
+                validator.validate(championship);
+
+        assertViolation(
+                violations,
+                "name",
+                "Championship name must be between 3 and 100 characters");
     }
 
     /**
@@ -116,8 +168,14 @@ class ChampionshipTest {
     @Test
     void testNullTypeFails() {
         championship.setType(null);
-        Set<ConstraintViolation<Championship>> violations = validator.validate(championship);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Championship>> violations =
+                validator.validate(championship);
+
+        assertViolation(
+                violations,
+                "type",
+                "Championship type cannot be blank");
     }
 
     /**
@@ -126,8 +184,14 @@ class ChampionshipTest {
     @Test
     void testBlankTypeFails() {
         championship.setType("");
-        Set<ConstraintViolation<Championship>> violations = validator.validate(championship);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Championship>> violations =
+                validator.validate(championship);
+
+        assertViolation(
+                violations,
+                "type",
+                "Championship type cannot be blank");
     }
 
     /**
@@ -136,8 +200,14 @@ class ChampionshipTest {
     @Test
     void testWhitespaceTypeFails() {
         championship.setType("   ");
-        Set<ConstraintViolation<Championship>> violations = validator.validate(championship);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Championship>> violations =
+                validator.validate(championship);
+
+        assertViolation(
+                violations,
+                "type",
+                "Championship type cannot be blank");
     }
 
     /**
@@ -146,8 +216,14 @@ class ChampionshipTest {
     @Test
     void testYearBefore1950Fails() {
         championship.setYear(1949);
-        Set<ConstraintViolation<Championship>> violations = validator.validate(championship);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Championship>> violations =
+                validator.validate(championship);
+
+        assertViolation(
+                violations,
+                "year",
+                "Championship year cannot be before 1950");
     }
 
     /**
@@ -166,8 +242,14 @@ class ChampionshipTest {
     @Test
     void testNegativePrizeMoneyFails() {
         championship.setPrizeMoney(-1.0);
-        Set<ConstraintViolation<Championship>> violations = validator.validate(championship);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Championship>> violations =
+                validator.validate(championship);
+
+        assertViolation(
+                violations,
+                "prizeMoney",
+                "Prize money cannot be negative");
     }
 
     /**
@@ -186,8 +268,14 @@ class ChampionshipTest {
     @Test
     void testNullOrganizerFails() {
         championship.setOrganizer(null);
-        Set<ConstraintViolation<Championship>> violations = validator.validate(championship);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Championship>> violations =
+                validator.validate(championship);
+
+        assertViolation(
+                violations,
+                "organizer",
+                "Organizer cannot be blank");
     }
 
     /**
@@ -196,8 +284,14 @@ class ChampionshipTest {
     @Test
     void testBlankOrganizerFails() {
         championship.setOrganizer("");
-        Set<ConstraintViolation<Championship>> violations = validator.validate(championship);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Championship>> violations =
+                validator.validate(championship);
+
+        assertViolation(
+                violations,
+                "organizer",
+                "Organizer cannot be blank");
     }
 
     /**
@@ -206,7 +300,40 @@ class ChampionshipTest {
     @Test
     void testWhitespaceOrganizerFails() {
         championship.setOrganizer("   ");
-        Set<ConstraintViolation<Championship>> violations = validator.validate(championship);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Championship>> violations =
+                validator.validate(championship);
+
+        assertViolation(
+                violations,
+                "organizer",
+                "Organizer cannot be blank");
     }
+
+    /**
+     * Tests that a non-blank type passes validation.
+     */
+    @Test
+    void testValidTypePasses() {
+        championship.setType("F1");
+
+        Set<ConstraintViolation<Championship>> violations =
+                validator.validate(championship);
+
+        assertTrue(violations.isEmpty());
+    }
+
+    /**
+     * Tests that a non-blank organizer passes validation.
+     */
+    @Test
+    void testValidOrganizerPasses() {
+        championship.setOrganizer("FIA");
+
+        Set<ConstraintViolation<Championship>> violations =
+                validator.validate(championship);
+
+        assertTrue(violations.isEmpty());
+    }
+
 }

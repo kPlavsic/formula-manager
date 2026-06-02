@@ -20,7 +20,7 @@ import java.util.Scanner;
  * @author kPlavsic
  * @version 1.0
  */
-@Component
+//@Component
 public class ConsoleMenu implements CommandLineRunner {
 
     private Scanner scanner = new Scanner(System.in);

@@ -22,6 +22,28 @@ class CircuitTest {
     private Circuit circuit;
 
     /**
+     * Verifies that a validation violation exists for the specified field
+     * and that the expected validation message is present.
+     *
+     * @param violations validation violations returned by the validator
+     * @param fieldName field expected to contain the violation
+     * @param expectedMessage expected validation message
+     * @param <T> validated object type
+     */
+    private <T> void assertViolation(
+            Set<ConstraintViolation<T>> violations,
+            String fieldName,
+            String expectedMessage) {
+
+        assertTrue(
+                violations.stream().anyMatch(v ->
+                        v.getPropertyPath().toString().equals(fieldName)
+                                && v.getMessage().equals(expectedMessage)
+                )
+        );
+    }
+
+    /**
      * Sets up the validator and a valid circuit before each test.
      */
     @BeforeEach
@@ -55,8 +77,14 @@ class CircuitTest {
     @Test
     void testNullNameFails() {
         circuit.setName(null);
-        Set<ConstraintViolation<Circuit>> violations = validator.validate(circuit);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Circuit>> violations =
+                validator.validate(circuit);
+
+        assertViolation(
+                violations,
+                "name",
+                "Circuit name cannot be blank");
     }
 
     /**
@@ -65,8 +93,14 @@ class CircuitTest {
     @Test
     void testBlankNameFails() {
         circuit.setName("");
-        Set<ConstraintViolation<Circuit>> violations = validator.validate(circuit);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Circuit>> violations =
+                validator.validate(circuit);
+
+        assertViolation(
+                violations,
+                "name",
+                "Circuit name cannot be blank");
     }
 
     /**
@@ -75,8 +109,14 @@ class CircuitTest {
     @Test
     void testWhitespaceNameFails() {
         circuit.setName("   ");
-        Set<ConstraintViolation<Circuit>> violations = validator.validate(circuit);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Circuit>> violations =
+                validator.validate(circuit);
+
+        assertViolation(
+                violations,
+                "name",
+                "Circuit name cannot be blank");
     }
 
     /**
@@ -85,8 +125,14 @@ class CircuitTest {
     @Test
     void testNameTooShortFails() {
         circuit.setName("Mo");
-        Set<ConstraintViolation<Circuit>> violations = validator.validate(circuit);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Circuit>> violations =
+                validator.validate(circuit);
+
+        assertViolation(
+                violations,
+                "name",
+                "Circuit name must be between 3 and 100 characters");
     }
 
     /**
@@ -95,8 +141,14 @@ class CircuitTest {
     @Test
     void testNameTooLongFails() {
         circuit.setName("A".repeat(101));
-        Set<ConstraintViolation<Circuit>> violations = validator.validate(circuit);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Circuit>> violations =
+                validator.validate(circuit);
+
+        assertViolation(
+                violations,
+                "name",
+                "Circuit name must be between 3 and 100 characters");
     }
 
     /**
@@ -115,8 +167,14 @@ class CircuitTest {
     @Test
     void testNullCountryFails() {
         circuit.setCountry(null);
-        Set<ConstraintViolation<Circuit>> violations = validator.validate(circuit);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Circuit>> violations =
+                validator.validate(circuit);
+
+        assertViolation(
+                violations,
+                "country",
+                "Country cannot be blank");
     }
 
     /**
@@ -125,8 +183,14 @@ class CircuitTest {
     @Test
     void testBlankCountryFails() {
         circuit.setCountry("");
-        Set<ConstraintViolation<Circuit>> violations = validator.validate(circuit);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Circuit>> violations =
+                validator.validate(circuit);
+
+        assertViolation(
+                violations,
+                "country",
+                "Country cannot be blank");
     }
 
     /**
@@ -135,8 +199,14 @@ class CircuitTest {
     @Test
     void testWhitespaceCountryFails() {
         circuit.setCountry("   ");
-        Set<ConstraintViolation<Circuit>> violations = validator.validate(circuit);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Circuit>> violations =
+                validator.validate(circuit);
+
+        assertViolation(
+                violations,
+                "country",
+                "Country cannot be blank");
     }
 
     /**
@@ -145,8 +215,14 @@ class CircuitTest {
     @Test
     void testZeroLengthFails() {
         circuit.setLength(0.0);
-        Set<ConstraintViolation<Circuit>> violations = validator.validate(circuit);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Circuit>> violations =
+                validator.validate(circuit);
+
+        assertViolation(
+                violations,
+                "length",
+                "Circuit length must be positive");
     }
 
     /**
@@ -155,8 +231,14 @@ class CircuitTest {
     @Test
     void testNegativeLengthFails() {
         circuit.setLength(-1.0);
-        Set<ConstraintViolation<Circuit>> violations = validator.validate(circuit);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Circuit>> violations =
+                validator.validate(circuit);
+
+        assertViolation(
+                violations,
+                "length",
+                "Circuit length must be positive");
     }
 
     /**
@@ -175,8 +257,14 @@ class CircuitTest {
     @Test
     void testZeroNumberOfTurnsFails() {
         circuit.setNumberOfTurns(0);
-        Set<ConstraintViolation<Circuit>> violations = validator.validate(circuit);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Circuit>> violations =
+                validator.validate(circuit);
+
+        assertViolation(
+                violations,
+                "numberOfTurns",
+                "Number of turns must be positive");
     }
 
     /**
@@ -185,8 +273,14 @@ class CircuitTest {
     @Test
     void testNegativeNumberOfTurnsFails() {
         circuit.setNumberOfTurns(-1);
-        Set<ConstraintViolation<Circuit>> violations = validator.validate(circuit);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Circuit>> violations =
+                validator.validate(circuit);
+
+        assertViolation(
+                violations,
+                "numberOfTurns",
+                "Number of turns must be positive");
     }
 
     /**
@@ -205,8 +299,14 @@ class CircuitTest {
     @Test
     void testZeroCapacityFails() {
         circuit.setCapacity(0);
-        Set<ConstraintViolation<Circuit>> violations = validator.validate(circuit);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Circuit>> violations =
+                validator.validate(circuit);
+
+        assertViolation(
+                violations,
+                "capacity",
+                "Capacity must be positive");
     }
 
     /**
@@ -215,8 +315,14 @@ class CircuitTest {
     @Test
     void testNegativeCapacityFails() {
         circuit.setCapacity(-1);
-        Set<ConstraintViolation<Circuit>> violations = validator.validate(circuit);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Circuit>> violations =
+                validator.validate(circuit);
+
+        assertViolation(
+                violations,
+                "capacity",
+                "Capacity must be positive");
     }
 
     /**
@@ -226,6 +332,19 @@ class CircuitTest {
     void testExactlyOneCapacityPasses() {
         circuit.setCapacity(1);
         Set<ConstraintViolation<Circuit>> violations = validator.validate(circuit);
+        assertTrue(violations.isEmpty());
+    }
+
+    /**
+     * Tests that a non-blank country passes validation.
+     */
+    @Test
+    void testValidCountryPasses() {
+        circuit.setCountry("Italy");
+
+        Set<ConstraintViolation<Circuit>> violations =
+                validator.validate(circuit);
+
         assertTrue(violations.isEmpty());
     }
 }

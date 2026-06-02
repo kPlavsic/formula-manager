@@ -31,6 +31,7 @@ public class Season {
 
     /**
      * Year in which the season takes place.
+     * Invalid values: any value less than 1950.
      */
     @Min(value = 1950, message = "Season year cannot be before 1950")
     @Column(nullable = false)
@@ -38,6 +39,7 @@ public class Season {
 
     /**
      * Total number of races in this season.
+     * Invalid values: zero and negative values.
      */
     @Positive(message = "Number of races must be positive")
     @Column(nullable = false)
@@ -51,6 +53,7 @@ public class Season {
 
     /**
      * Start date of the season.
+     * Invalid values: null.
      */
     @NotNull(message = "Start time cannot be null")
     @Column(nullable = false)
@@ -58,6 +61,7 @@ public class Season {
 
     /**
      * Championship this season belongs to.
+     * Invalid values: null.
      */
     @NotNull(message = "Championship cannot be null")
     @ManyToOne

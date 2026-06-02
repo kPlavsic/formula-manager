@@ -30,6 +30,8 @@ public class Championship {
 
     /**
      * Name of the championship (e.g. "Formula 1 World Championship").
+     * Invalid values: null, empty string, whitespace-only string,
+     * string shorter than 3 or longer than 100 characters.
      */
     @NotBlank(message = "Championship name cannot be blank")
     @Size(min = 3, max = 100, message = "Championship name must be between 3 and 100 characters")
@@ -38,6 +40,7 @@ public class Championship {
 
     /**
      * Type of the championship (e.g. "Formula 1", "Formula 2").
+     * Invalid values: null, empty string, whitespace-only string.
      */
     @NotBlank(message = "Championship type cannot be blank")
     @Column(nullable = false)
@@ -45,6 +48,7 @@ public class Championship {
 
     /**
      * Year in which the championship takes place.
+     * Invalid values: any value less than 1950.
      */
     @Min(value = 1950, message = "Championship year cannot be before 1950")
     @Column(nullable = false)
@@ -52,6 +56,7 @@ public class Championship {
 
     /**
      * Total prize money awarded in this championship.
+     * Invalid values: negative values.
      */
     @PositiveOrZero(message = "Prize money cannot be negative")
     @Column(nullable = false)
@@ -59,6 +64,7 @@ public class Championship {
 
     /**
      * Name of the organization that organizes the championship.
+     * Invalid values: null, empty string, whitespace-only string.
      */
     @NotBlank(message = "Organizer cannot be blank")
     @Column(nullable = false)

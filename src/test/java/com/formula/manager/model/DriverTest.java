@@ -24,6 +24,30 @@ class DriverTest {
     private Team team;
 
     /**
+     * Verifies that a validation violation exists for the specified field
+     * and that the expected validation message is present.
+     *
+     * @param violations validation violations returned by the validator
+     * @param fieldName field expected to contain the violation
+     * @param expectedMessage expected validation message
+     * @param <T> validated object type
+     */
+    private <T> void assertViolation(
+            Set<ConstraintViolation<T>> violations,
+            String fieldName,
+            String expectedMessage) {
+
+        assertFalse(violations.isEmpty());
+
+        assertTrue(
+                violations.stream().anyMatch(v ->
+                        v.getPropertyPath().toString().equals(fieldName)
+                                && v.getMessage().equals(expectedMessage)
+                )
+        );
+    }
+
+    /**
      * Sets up the validator and a valid driver before each test.
      */
     @BeforeEach
@@ -55,55 +79,6 @@ class DriverTest {
         assertTrue(violations.isEmpty());
     }
 
-    /**
-     * Tests that a null name fails validation.
-     */
-    @Test
-    void testNullNameFails() {
-        driver.setName(null);
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a blank name fails validation.
-     */
-    @Test
-    void testBlankNameFails() {
-        driver.setName("");
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a whitespace-only name fails validation.
-     */
-    @Test
-    void testWhitespaceNameFails() {
-        driver.setName("   ");
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a name shorter than 2 characters fails validation.
-     */
-    @Test
-    void testNameTooShortFails() {
-        driver.setName("M");
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a name longer than 50 characters fails validation.
-     */
-    @Test
-    void testNameTooLongFails() {
-        driver.setName("A".repeat(51));
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
-    }
 
     /**
      * Tests that a name of exactly 2 characters passes validation (boundary case).
@@ -113,56 +88,6 @@ class DriverTest {
         driver.setName("MX");
         Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
         assertTrue(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a null surname fails validation.
-     */
-    @Test
-    void testNullSurnameFails() {
-        driver.setSurname(null);
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a blank surname fails validation.
-     */
-    @Test
-    void testBlankSurnameFails() {
-        driver.setSurname("");
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a whitespace-only surname fails validation.
-     */
-    @Test
-    void testWhitespaceSurnameFails() {
-        driver.setSurname("   ");
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a surname shorter than 2 characters fails validation.
-     */
-    @Test
-    void testSurnameTooShortFails() {
-        driver.setSurname("V");
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a surname longer than 50 characters fails validation.
-     */
-    @Test
-    void testSurnameTooLongFails() {
-        driver.setSurname("A".repeat(51));
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
     }
 
     /**
@@ -176,46 +101,6 @@ class DriverTest {
     }
 
     /**
-     * Tests that a null nationality fails validation.
-     */
-    @Test
-    void testNullNationalityFails() {
-        driver.setNationality(null);
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a blank nationality fails validation.
-     */
-    @Test
-    void testBlankNationalityFails() {
-        driver.setNationality("");
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a whitespace-only nationality fails validation.
-     */
-    @Test
-    void testWhitespaceNationalityFails() {
-        driver.setNationality("   ");
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that negative points fails validation.
-     */
-    @Test
-    void testNegativePointsFails() {
-        driver.setPoints(-1);
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
      * Tests that zero points passes validation (boundary case).
      */
     @Test
@@ -223,36 +108,6 @@ class DriverTest {
         driver.setPoints(0);
         Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
         assertTrue(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a null date of birth fails validation.
-     */
-    @Test
-    void testNullDateOfBirthFails() {
-        driver.setDateOfBirth(null);
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a date of birth in the future fails validation.
-     */
-    @Test
-    void testFutureDateOfBirthFails() {
-        driver.setDateOfBirth(LocalDate.now().plusDays(1));
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that negative number of championships fails validation.
-     */
-    @Test
-    void testNegativeNumberOfChampionshipsFails() {
-        driver.setNumberOfChampionships(-1);
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
     }
 
     /**
@@ -266,12 +121,316 @@ class DriverTest {
     }
 
     /**
+     * Tests that a null name fails validation.
+     */
+    @Test
+    void testNullNameFails() {
+        driver.setName(null);
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "name",
+                "Driver name cannot be blank");
+    }
+
+    /**
+     * Tests that a blank name fails validation.
+     */
+    @Test
+    void testBlankNameFails() {
+        driver.setName("");
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "name",
+                "Driver name cannot be blank");
+    }
+
+    /**
+     * Tests that a whitespace-only name fails validation.
+     */
+    @Test
+    void testWhitespaceNameFails() {
+        driver.setName("   ");
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "name",
+                "Driver name cannot be blank");
+    }
+
+    /**
+     * Tests that a name shorter than 2 characters fails validation.
+     */
+    @Test
+    void testNameTooShortFails() {
+        driver.setName("M");
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "name",
+                "Driver name must be between 2 and 50 characters");
+    }
+
+    /**
+     * Tests that a name longer than 50 characters fails validation.
+     */
+    @Test
+    void testNameTooLongFails() {
+        driver.setName("A".repeat(51));
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "name",
+                "Driver name must be between 2 and 50 characters");
+    }
+
+    /**
+     * Tests that a null surname fails validation.
+     */
+    @Test
+    void testNullSurnameFails() {
+        driver.setSurname(null);
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "surname",
+                "Driver surname cannot be blank");
+    }
+
+    /**
+     * Tests that a blank surname fails validation.
+     */
+    @Test
+    void testBlankSurnameFails() {
+        driver.setSurname("");
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "surname",
+                "Driver surname cannot be blank");
+    }
+
+    /**
+     * Tests that a whitespace-only surname fails validation.
+     */
+    @Test
+    void testWhitespaceSurnameFails() {
+        driver.setSurname("   ");
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "surname",
+                "Driver surname cannot be blank");
+    }
+
+    /**
+     * Tests that a surname shorter than 2 characters fails validation.
+     */
+    @Test
+    void testSurnameTooShortFails() {
+        driver.setSurname("V");
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "surname",
+                "Driver surname must be between 2 and 50 characters");
+    }
+
+    /**
+     * Tests that a surname longer than 50 characters fails validation.
+     */
+    @Test
+    void testSurnameTooLongFails() {
+        driver.setSurname("A".repeat(51));
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "surname",
+                "Driver surname must be between 2 and 50 characters");
+    }
+
+    /**
+     * Tests that a null nationality fails validation.
+     */
+    @Test
+    void testNullNationalityFails() {
+        driver.setNationality(null);
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "nationality",
+                "Nationality cannot be blank");
+    }
+
+    /**
+     * Tests that a blank nationality fails validation.
+     */
+    @Test
+    void testBlankNationalityFails() {
+        driver.setNationality("");
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "nationality",
+                "Nationality cannot be blank");
+    }
+
+    /**
+     * Tests that a whitespace-only nationality fails validation.
+     */
+    @Test
+    void testWhitespaceNationalityFails() {
+        driver.setNationality("   ");
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "nationality",
+                "Nationality cannot be blank");
+    }
+
+    /**
+     * Tests that negative points fails validation.
+     */
+    @Test
+    void testNegativePointsFails() {
+        driver.setPoints(-1);
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "points",
+                "Points cannot be negative");
+    }
+
+    /**
+     * Tests that a null date of birth fails validation.
+     */
+    @Test
+    void testNullDateOfBirthFails() {
+        driver.setDateOfBirth(null);
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "dateOfBirth",
+                "Date of birth cannot be null");
+    }
+
+    /**
+     * Tests that a date of birth in the future fails validation.
+     */
+    @Test
+    void testFutureDateOfBirthFails() {
+        driver.setDateOfBirth(LocalDate.now().plusDays(1));
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "dateOfBirth",
+                "Date of birth must be in the past");
+    }
+
+    /**
+     * Tests that negative number of championships fails validation.
+     */
+    @Test
+    void testNegativeNumberOfChampionshipsFails() {
+        driver.setNumberOfChampionships(-1);
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "numberOfChampionships",
+                "Number of championships cannot be negative");
+    }
+
+    /**
      * Tests that a null team fails validation.
      */
     @Test
     void testNullTeamFails() {
         driver.setTeam(null);
-        Set<ConstraintViolation<Driver>> violations = validator.validate(driver);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertViolation(
+                violations,
+                "team",
+                "Team cannot be null");
+    }
+
+    /**
+     * Tests that a non-blank nationality passes validation.
+     */
+    @Test
+    void testValidNationalityPasses() {
+        driver.setNationality("Dutch");
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertTrue(violations.isEmpty());
+    }
+
+    /**
+     * Tests that a past date of birth passes validation.
+     */
+    @Test
+    void testPastDateOfBirthPasses() {
+        driver.setDateOfBirth(LocalDate.of(1997, 9, 30));
+
+        Set<ConstraintViolation<Driver>> violations =
+                validator.validate(driver);
+
+        assertTrue(violations.isEmpty());
     }
 }

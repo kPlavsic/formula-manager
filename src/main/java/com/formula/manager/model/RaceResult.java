@@ -29,6 +29,7 @@ public class RaceResult {
 
     /**
      * Final position of the driver in the race (e.g. 1 for first place).
+     * Invalid values: zero and negative values.
      */
     @Positive(message = "Position must be positive")
     @Column(nullable = false)
@@ -36,6 +37,7 @@ public class RaceResult {
 
     /**
      * Total race time of the driver (e.g. "1:30:25.456").
+     * Invalid values: null, empty string, whitespace-only string.
      */
     @NotBlank(message = "Time cannot be blank")
     @Column(nullable = false)
@@ -43,6 +45,7 @@ public class RaceResult {
 
     /**
      * Championship points earned by the driver in this race.
+     * Invalid values: negative values.
      */
     @PositiveOrZero(message = "Points cannot be negative")
     @Column(nullable = false)
@@ -50,6 +53,7 @@ public class RaceResult {
 
     /**
      * Driver who achieved this result.
+     * Invalid values: null.
      */
     @NotNull(message = "Driver cannot be null")
     @ManyToOne
@@ -58,6 +62,7 @@ public class RaceResult {
 
     /**
      * Race in which this result was achieved.
+     * Invalid values: null.
      */
     @NotNull(message = "Race cannot be null")
     @ManyToOne

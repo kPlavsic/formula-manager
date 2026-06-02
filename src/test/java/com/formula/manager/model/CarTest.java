@@ -7,7 +7,9 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -21,6 +23,28 @@ class CarTest {
     private Validator validator;
     private Car car;
     private Team team;
+
+    /**
+     * Verifies that a validation violation exists for the specified field
+     * and that the expected validation message is present.
+     *
+     * @param violations validation violations returned by the validator
+     * @param fieldName field expected to contain the violation
+     * @param expectedMessage expected validation message
+     * @param <T> validated object type
+     */
+    private <T> void assertViolation(
+            Set<ConstraintViolation<T>> violations,
+            String fieldName,
+            String expectedMessage) {
+
+        assertTrue(
+                violations.stream().anyMatch(v ->
+                        v.getPropertyPath().toString().equals(fieldName)
+                                && v.getMessage().equals(expectedMessage)
+                )
+        );
+    }
 
     /**
      * Sets up the validator and a valid car before each test.
@@ -59,8 +83,14 @@ class CarTest {
     @Test
     void testNullModelFails() {
         car.setModel(null);
-        Set<ConstraintViolation<Car>> violations = validator.validate(car);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Car>> violations =
+                validator.validate(car);
+
+        assertViolation(
+                violations,
+                "model",
+                "Car model cannot be blank");
     }
 
     /**
@@ -69,8 +99,14 @@ class CarTest {
     @Test
     void testBlankModelFails() {
         car.setModel("");
-        Set<ConstraintViolation<Car>> violations = validator.validate(car);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Car>> violations =
+                validator.validate(car);
+
+        assertViolation(
+                violations,
+                "model",
+                "Car model cannot be blank");
     }
 
     /**
@@ -79,8 +115,14 @@ class CarTest {
     @Test
     void testWhitespaceModelFails() {
         car.setModel("   ");
-        Set<ConstraintViolation<Car>> violations = validator.validate(car);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Car>> violations =
+                validator.validate(car);
+
+        assertViolation(
+                violations,
+                "model",
+                "Car model cannot be blank");
     }
 
     /**
@@ -89,8 +131,14 @@ class CarTest {
     @Test
     void testModelTooShortFails() {
         car.setModel("R");
-        Set<ConstraintViolation<Car>> violations = validator.validate(car);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Car>> violations =
+                validator.validate(car);
+
+        assertViolation(
+                violations,
+                "model",
+                "Car model must be between 2 and 50 characters");
     }
 
     /**
@@ -99,8 +147,14 @@ class CarTest {
     @Test
     void testModelTooLongFails() {
         car.setModel("A".repeat(51));
-        Set<ConstraintViolation<Car>> violations = validator.validate(car);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Car>> violations =
+                validator.validate(car);
+
+        assertViolation(
+                violations,
+                "model",
+                "Car model must be between 2 and 50 characters");
     }
 
     /**
@@ -119,8 +173,14 @@ class CarTest {
     @Test
     void testNullMotorFails() {
         car.setMotor(null);
-        Set<ConstraintViolation<Car>> violations = validator.validate(car);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Car>> violations =
+                validator.validate(car);
+
+        assertViolation(
+                violations,
+                "motor",
+                "Motor cannot be blank");
     }
 
     /**
@@ -129,8 +189,14 @@ class CarTest {
     @Test
     void testBlankMotorFails() {
         car.setMotor("");
-        Set<ConstraintViolation<Car>> violations = validator.validate(car);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Car>> violations =
+                validator.validate(car);
+
+        assertViolation(
+                violations,
+                "motor",
+                "Motor cannot be blank");
     }
 
     /**
@@ -139,8 +205,14 @@ class CarTest {
     @Test
     void testWhitespaceMotorFails() {
         car.setMotor("   ");
-        Set<ConstraintViolation<Car>> violations = validator.validate(car);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Car>> violations =
+                validator.validate(car);
+
+        assertViolation(
+                violations,
+                "motor",
+                "Motor cannot be blank");
     }
 
     /**
@@ -149,8 +221,14 @@ class CarTest {
     @Test
     void testYearBefore1950Fails() {
         car.setYear(1949);
-        Set<ConstraintViolation<Car>> violations = validator.validate(car);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Car>> violations =
+                validator.validate(car);
+
+        assertViolation(
+                violations,
+                "year",
+                "Car year cannot be before 1950");
     }
 
     /**
@@ -169,8 +247,14 @@ class CarTest {
     @Test
     void testZeroHorsePowerFails() {
         car.setHorsePower(0);
-        Set<ConstraintViolation<Car>> violations = validator.validate(car);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Car>> violations =
+                validator.validate(car);
+
+        assertViolation(
+                violations,
+                "horsePower",
+                "Horsepower must be positive");
     }
 
     /**
@@ -179,8 +263,14 @@ class CarTest {
     @Test
     void testNegativeHorsePowerFails() {
         car.setHorsePower(-1);
-        Set<ConstraintViolation<Car>> violations = validator.validate(car);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Car>> violations =
+                validator.validate(car);
+
+        assertViolation(
+                violations,
+                "horsePower",
+                "Horsepower must be positive");
     }
 
     /**
@@ -198,9 +288,15 @@ class CarTest {
      */
     @Test
     void testZeroWeightFails() {
-        car.setWeight(0.0);
-        Set<ConstraintViolation<Car>> violations = validator.validate(car);
-        assertFalse(violations.isEmpty());
+        car.setWeight(0);
+
+        Set<ConstraintViolation<Car>> violations =
+                validator.validate(car);
+
+        assertViolation(
+                violations,
+                "weight",
+                "Weight must be positive");
     }
 
     /**
@@ -208,11 +304,16 @@ class CarTest {
      */
     @Test
     void testNegativeWeightFails() {
-        car.setWeight(-1.0);
-        Set<ConstraintViolation<Car>> violations = validator.validate(car);
-        assertFalse(violations.isEmpty());
-    }
+        car.setWeight(-1);
 
+        Set<ConstraintViolation<Car>> violations =
+                validator.validate(car);
+
+        assertViolation(
+                violations,
+                "weight",
+                "Weight must be positive");
+    }
     /**
      * Tests that a weight of 0.1 passes validation (boundary case).
      */
@@ -229,7 +330,13 @@ class CarTest {
     @Test
     void testNullTeamFails() {
         car.setTeam(null);
-        Set<ConstraintViolation<Car>> violations = validator.validate(car);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Car>> violations =
+                validator.validate(car);
+
+        assertViolation(
+                violations,
+                "team",
+                "Team cannot be null");
     }
 }

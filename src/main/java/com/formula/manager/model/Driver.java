@@ -31,6 +31,8 @@ public class Driver {
 
     /**
      * First name of the driver.
+     * Invalid values: null, empty string, whitespace-only string,
+     * string shorter than 2 or longer than 50 characters.
      */
     @NotBlank(message = "Driver name cannot be blank")
     @Size(min = 2, max = 50, message = "Driver name must be between 2 and 50 characters")
@@ -39,6 +41,8 @@ public class Driver {
 
     /**
      * Last name of the driver.
+     * Invalid values: null, empty string, whitespace-only string,
+     * string shorter than 2 or longer than 50 characters.
      */
     @NotBlank(message = "Driver surname cannot be blank")
     @Size(min = 2, max = 50, message = "Driver surname must be between 2 and 50 characters")
@@ -47,6 +51,7 @@ public class Driver {
 
     /**
      * Nationality of the driver (e.g. "Dutch").
+     * Invalid values: null, empty string, whitespace-only string.
      */
     @NotBlank(message = "Nationality cannot be blank")
     @Column(nullable = false)
@@ -54,6 +59,7 @@ public class Driver {
 
     /**
      * Total championship points accumulated by the driver.
+     * Invalid values: negative values.
      */
     @PositiveOrZero(message = "Points cannot be negative")
     @Column(nullable = false)
@@ -61,6 +67,7 @@ public class Driver {
 
     /**
      * Date of birth of the driver.
+     * Invalid values: null, any date that is today or in the future.
      */
     @NotNull(message = "Date of birth cannot be null")
     @Past(message = "Date of birth must be in the past")
@@ -69,6 +76,7 @@ public class Driver {
 
     /**
      * Total number of championships won by the driver.
+     * Invalid values: negative values.
      */
     @PositiveOrZero(message = "Number of championships cannot be negative")
     @Column(nullable = false)
@@ -76,6 +84,7 @@ public class Driver {
 
     /**
      * Team this driver belongs to.
+     * Invalid values: null.
      */
     @NotNull(message = "Team cannot be null")
     @ManyToOne

@@ -29,6 +29,8 @@ public class Car {
 
     /**
      * Model name of the car (e.g. "RB20").
+     * Invalid values: null, empty string, whitespace-only string,
+     * string shorter than 2 or longer than 50 characters.
      */
     @NotBlank(message = "Car model cannot be blank")
     @Size(min = 2, max = 50, message = "Car model must be between 2 and 50 characters")
@@ -37,6 +39,7 @@ public class Car {
 
     /**
      * Engine/motor type used in the car (e.g. "Honda RBPT").
+     * Invalid values: null, empty string, whitespace-only string.
      */
     @NotBlank(message = "Motor cannot be blank")
     @Column(nullable = false)
@@ -44,6 +47,7 @@ public class Car {
 
     /**
      * Year the car model was manufactured.
+     * Invalid values: any value less than 1950.
      */
     @Min(value = 1950, message = "Car year cannot be before 1950")
     @Column(nullable = false)
@@ -51,6 +55,8 @@ public class Car {
 
     /**
      * Horsepower of the car engine.
+     * Invalid values: zero and negative values.
+     *
      */
     @Positive(message = "Horsepower must be positive")
     @Column(nullable = false)
@@ -58,6 +64,8 @@ public class Car {
 
     /**
      * Weight of the car in kilograms.
+     * Invalid values: zero and negative values.
+     *
      */
     @Positive(message = "Weight must be positive")
     @Column(nullable = false)
@@ -65,6 +73,8 @@ public class Car {
 
     /**
      * Team this car belongs to.
+     * Invalid values: null.
+     *
      */
     @NotNull(message = "Team cannot be null")
     @ManyToOne

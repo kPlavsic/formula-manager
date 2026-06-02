@@ -76,10 +76,12 @@ public class DriverService {
     }
 
     /**
-     * Deletes a driver from the system.
+     * Removes a driver from its team.
+     * Due to orphanRemoval configuration, the driver will be deleted
+     * when removed from the team's collection.
      *
-     * @param driver the driver to delete
-     * @throws IllegalArgumentException if driver is null or has no ID
+     * @param driver driver to remove
+     * @throws IllegalArgumentException if the driver does not exist
      */
     public void deleteDriver(Driver driver) {
 

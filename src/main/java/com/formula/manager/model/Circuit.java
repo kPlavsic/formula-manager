@@ -28,6 +28,8 @@ public class Circuit {
 
     /**
      * Name of the circuit (e.g. "Monza").
+     * Invalid values: null, empty string, whitespace-only string,
+     * string shorter than 3 or longer than 100 characters.
      */
     @NotBlank(message = "Circuit name cannot be blank")
     @Size(min = 3, max = 100, message = "Circuit name must be between 3 and 100 characters")
@@ -36,6 +38,7 @@ public class Circuit {
 
     /**
      * Country where the circuit is located.
+     * Invalid values: null, empty string, whitespace-only string.
      */
     @NotBlank(message = "Country cannot be blank")
     @Column(nullable = false)
@@ -43,6 +46,7 @@ public class Circuit {
 
     /**
      * Length of the circuit in kilometers.
+     * Invalid values: zero and negative values.
      */
     @Positive(message = "Circuit length must be positive")
     @Column(nullable = false)
@@ -50,6 +54,7 @@ public class Circuit {
 
     /**
      * Number of turns on the circuit.
+     * Invalid values: zero and negative values.
      */
     @Positive(message = "Number of turns must be positive")
     @Column(nullable = false)
@@ -57,6 +62,7 @@ public class Circuit {
 
     /**
      * Maximum spectator capacity of the circuit.
+     * Invalid values: zero and negative values.
      */
     @Positive(message = "Capacity must be positive")
     @Column(nullable = false)

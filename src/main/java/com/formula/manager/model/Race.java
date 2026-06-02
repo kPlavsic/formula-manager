@@ -31,6 +31,8 @@ public class Race {
 
     /**
      * Name of the race (e.g. "Monaco Grand Prix").
+     * Invalid values: null, empty string, whitespace-only string,
+     * string shorter than 3 or longer than 100 characters.
      */
     @NotBlank(message = "Race name cannot be blank")
     @Size(min = 3, max = 100, message = "Race name must be between 3 and 100 characters")
@@ -39,6 +41,7 @@ public class Race {
 
     /**
      * Date when the race begins.
+     * Invalid values: null.
      */
     @NotNull(message = "Date of beginning cannot be null")
     @Column(nullable = false)
@@ -46,6 +49,7 @@ public class Race {
 
     /**
      * Date when the race ends.
+     * Invalid values: null.
      */
     @NotNull(message = "Date of ending cannot be null")
     @Column(nullable = false)
@@ -53,6 +57,7 @@ public class Race {
 
     /**
      * Total number of laps in the race.
+     * Invalid values: zero and negative values.
      */
     @Positive(message = "Number of laps must be positive")
     @Column(nullable = false)
@@ -60,6 +65,7 @@ public class Race {
 
     /**
      * Season this race belongs to.
+     * Invalid values: null.
      */
     @NotNull(message = "Season cannot be null")
     @ManyToOne
@@ -68,6 +74,7 @@ public class Race {
 
     /**
      * Circuit on which this race is held.
+     * Invalid values: null.
      */
     @NotNull(message = "Circuit cannot be null")
     @ManyToOne

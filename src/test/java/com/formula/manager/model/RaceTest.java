@@ -26,6 +26,28 @@ class RaceTest {
     private Championship championship;
 
     /**
+     * Verifies that a validation violation exists for the specified field
+     * and that the expected validation message is present.
+     *
+     * @param violations validation violations returned by the validator
+     * @param fieldName field expected to contain the violation
+     * @param expectedMessage expected validation message
+     * @param <T> validated object type
+     */
+    private <T> void assertViolation(
+            Set<ConstraintViolation<T>> violations,
+            String fieldName,
+            String expectedMessage) {
+
+        assertTrue(
+                violations.stream().anyMatch(v ->
+                        v.getPropertyPath().toString().equals(fieldName)
+                                && v.getMessage().equals(expectedMessage)
+                )
+        );
+    }
+
+    /**
      * Sets up the validator and a valid race before each test.
      */
     @BeforeEach
@@ -64,55 +86,6 @@ class RaceTest {
         assertTrue(violations.isEmpty());
     }
 
-    /**
-     * Tests that a null name fails validation.
-     */
-    @Test
-    void testNullNameFails() {
-        race.setName(null);
-        Set<ConstraintViolation<Race>> violations = validator.validate(race);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a blank name fails validation.
-     */
-    @Test
-    void testBlankNameFails() {
-        race.setName("");
-        Set<ConstraintViolation<Race>> violations = validator.validate(race);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a whitespace-only name fails validation.
-     */
-    @Test
-    void testWhitespaceNameFails() {
-        race.setName("   ");
-        Set<ConstraintViolation<Race>> violations = validator.validate(race);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a name shorter than 3 characters fails validation.
-     */
-    @Test
-    void testNameTooShortFails() {
-        race.setName("GP");
-        Set<ConstraintViolation<Race>> violations = validator.validate(race);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a name longer than 100 characters fails validation.
-     */
-    @Test
-    void testNameTooLongFails() {
-        race.setName("A".repeat(101));
-        Set<ConstraintViolation<Race>> violations = validator.validate(race);
-        assertFalse(violations.isEmpty());
-    }
 
     /**
      * Tests that a name of exactly 3 characters passes validation (boundary case).
@@ -124,45 +97,6 @@ class RaceTest {
         assertTrue(violations.isEmpty());
     }
 
-    /**
-     * Tests that a null date of beginning fails validation.
-     */
-    @Test
-    void testNullDateOfBeginningFails() {
-        race.setDateOfBeginning(null);
-        Set<ConstraintViolation<Race>> violations = validator.validate(race);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a null date of ending fails validation.
-     */
-    @Test
-    void testNullDateOfEndingFails() {
-        race.setDateOfEnding(null);
-        Set<ConstraintViolation<Race>> violations = validator.validate(race);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that zero number of laps fails validation.
-     */
-    @Test
-    void testZeroNumberOfLapsFails() {
-        race.setNumberOfLaps(0);
-        Set<ConstraintViolation<Race>> violations = validator.validate(race);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that negative number of laps fails validation.
-     */
-    @Test
-    void testNegativeNumberOfLapsFails() {
-        race.setNumberOfLaps(-1);
-        Set<ConstraintViolation<Race>> violations = validator.validate(race);
-        assertFalse(violations.isEmpty());
-    }
 
     /**
      * Tests that exactly 1 lap passes validation (boundary case).
@@ -175,13 +109,163 @@ class RaceTest {
     }
 
     /**
+     * Tests that a null name fails validation.
+     */
+    @Test
+    void testNullNameFails() {
+        race.setName(null);
+
+        Set<ConstraintViolation<Race>> violations =
+                validator.validate(race);
+
+        assertViolation(
+                violations,
+                "name",
+                "Race name cannot be blank");
+    }
+
+    /**
+     * Tests that a blank name fails validation.
+     */
+    @Test
+    void testBlankNameFails() {
+        race.setName("");
+
+        Set<ConstraintViolation<Race>> violations =
+                validator.validate(race);
+
+        assertViolation(
+                violations,
+                "name",
+                "Race name cannot be blank");
+    }
+
+    /**
+     * Tests that a whitespace-only name fails validation.
+     */
+    @Test
+    void testWhitespaceNameFails() {
+        race.setName("   ");
+
+        Set<ConstraintViolation<Race>> violations =
+                validator.validate(race);
+
+        assertViolation(
+                violations,
+                "name",
+                "Race name cannot be blank");
+    }
+
+    /**
+     * Tests that a name shorter than 3 characters fails validation.
+     */
+    @Test
+    void testNameTooShortFails() {
+        race.setName("GP");
+
+        Set<ConstraintViolation<Race>> violations =
+                validator.validate(race);
+
+        assertViolation(
+                violations,
+                "name",
+                "Race name must be between 3 and 100 characters");
+    }
+
+    /**
+     * Tests that a name longer than 100 characters fails validation.
+     */
+    @Test
+    void testNameTooLongFails() {
+        race.setName("A".repeat(101));
+
+        Set<ConstraintViolation<Race>> violations =
+                validator.validate(race);
+
+        assertViolation(
+                violations,
+                "name",
+                "Race name must be between 3 and 100 characters");
+    }
+
+    /**
+     * Tests that a null date of beginning fails validation.
+     */
+    @Test
+    void testNullDateOfBeginningFails() {
+        race.setDateOfBeginning(null);
+
+        Set<ConstraintViolation<Race>> violations =
+                validator.validate(race);
+
+        assertViolation(
+                violations,
+                "dateOfBeginning",
+                "Date of beginning cannot be null");
+    }
+
+    /**
+     * Tests that a null date of ending fails validation.
+     */
+    @Test
+    void testNullDateOfEndingFails() {
+        race.setDateOfEnding(null);
+
+        Set<ConstraintViolation<Race>> violations =
+                validator.validate(race);
+
+        assertViolation(
+                violations,
+                "dateOfEnding",
+                "Date of ending cannot be null");
+    }
+
+    /**
+     * Tests that zero number of laps fails validation.
+     */
+    @Test
+    void testZeroNumberOfLapsFails() {
+        race.setNumberOfLaps(0);
+
+        Set<ConstraintViolation<Race>> violations =
+                validator.validate(race);
+
+        assertViolation(
+                violations,
+                "numberOfLaps",
+                "Number of laps must be positive");
+    }
+
+    /**
+     * Tests that negative number of laps fails validation.
+     */
+    @Test
+    void testNegativeNumberOfLapsFails() {
+        race.setNumberOfLaps(-1);
+
+        Set<ConstraintViolation<Race>> violations =
+                validator.validate(race);
+
+        assertViolation(
+                violations,
+                "numberOfLaps",
+                "Number of laps must be positive");
+    }
+
+    /**
      * Tests that a null season fails validation.
      */
     @Test
     void testNullSeasonFails() {
         race.setSeason(null);
-        Set<ConstraintViolation<Race>> violations = validator.validate(race);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Race>> violations =
+                validator.validate(race);
+
+        assertViolation(
+                violations,
+                "season",
+                "Season cannot be null");
     }
 
     /**
@@ -190,7 +274,13 @@ class RaceTest {
     @Test
     void testNullCircuitFails() {
         race.setCircuit(null);
-        Set<ConstraintViolation<Race>> violations = validator.validate(race);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<Race>> violations =
+                validator.validate(race);
+
+        assertViolation(
+                violations,
+                "circuit",
+                "Circuit cannot be null");
     }
 }

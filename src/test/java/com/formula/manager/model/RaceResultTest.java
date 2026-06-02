@@ -29,6 +29,30 @@ class RaceResultTest {
     private Championship championship;
 
     /**
+     * Verifies that a validation violation exists for the specified field
+     * and that the expected validation message is present.
+     *
+     * @param violations validation violations returned by the validator
+     * @param fieldName field expected to contain the violation
+     * @param expectedMessage expected validation message
+     * @param <T> validated object type
+     */
+    private <T> void assertViolation(
+            Set<ConstraintViolation<T>> violations,
+            String fieldName,
+            String expectedMessage) {
+
+        assertFalse(violations.isEmpty());
+
+        assertTrue(
+                violations.stream().anyMatch(v ->
+                        v.getPropertyPath().toString().equals(fieldName)
+                                && v.getMessage().equals(expectedMessage)
+                )
+        );
+    }
+
+    /**
      * Sets up the validator and a valid race result before each test.
      */
     @BeforeEach
@@ -75,25 +99,6 @@ class RaceResultTest {
         assertTrue(violations.isEmpty());
     }
 
-    /**
-     * Tests that zero position fails validation.
-     */
-    @Test
-    void testZeroPositionFails() {
-        raceResult.setPosition(0);
-        Set<ConstraintViolation<RaceResult>> violations = validator.validate(raceResult);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that negative position fails validation.
-     */
-    @Test
-    void testNegativePositionFails() {
-        raceResult.setPosition(-1);
-        Set<ConstraintViolation<RaceResult>> violations = validator.validate(raceResult);
-        assertFalse(violations.isEmpty());
-    }
 
     /**
      * Tests that exactly position 1 passes validation (boundary case).
@@ -103,46 +108,6 @@ class RaceResultTest {
         raceResult.setPosition(1);
         Set<ConstraintViolation<RaceResult>> violations = validator.validate(raceResult);
         assertTrue(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a null time fails validation.
-     */
-    @Test
-    void testNullTimeFails() {
-        raceResult.setTime(null);
-        Set<ConstraintViolation<RaceResult>> violations = validator.validate(raceResult);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a blank time fails validation.
-     */
-    @Test
-    void testBlankTimeFails() {
-        raceResult.setTime("");
-        Set<ConstraintViolation<RaceResult>> violations = validator.validate(raceResult);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that a whitespace-only time fails validation.
-     */
-    @Test
-    void testWhitespaceTimeFails() {
-        raceResult.setTime("   ");
-        Set<ConstraintViolation<RaceResult>> violations = validator.validate(raceResult);
-        assertFalse(violations.isEmpty());
-    }
-
-    /**
-     * Tests that negative points fails validation.
-     */
-    @Test
-    void testNegativePointsFails() {
-        raceResult.setPoints(-1);
-        Set<ConstraintViolation<RaceResult>> violations = validator.validate(raceResult);
-        assertFalse(violations.isEmpty());
     }
 
     /**
@@ -156,13 +121,115 @@ class RaceResultTest {
     }
 
     /**
+     * Tests that zero position fails validation.
+     */
+    @Test
+    void testZeroPositionFails() {
+        raceResult.setPosition(0);
+
+        Set<ConstraintViolation<RaceResult>> violations =
+                validator.validate(raceResult);
+
+        assertViolation(
+                violations,
+                "position",
+                "Position must be positive");
+    }
+
+    /**
+     * Tests that negative position fails validation.
+     */
+    @Test
+    void testNegativePositionFails() {
+        raceResult.setPosition(-1);
+
+        Set<ConstraintViolation<RaceResult>> violations =
+                validator.validate(raceResult);
+
+        assertViolation(
+                violations,
+                "position",
+                "Position must be positive");
+    }
+
+    /**
+     * Tests that a null time fails validation.
+     */
+    @Test
+    void testNullTimeFails() {
+        raceResult.setTime(null);
+
+        Set<ConstraintViolation<RaceResult>> violations =
+                validator.validate(raceResult);
+
+        assertViolation(
+                violations,
+                "time",
+                "Time cannot be blank");
+    }
+
+    /**
+     * Tests that a blank time fails validation.
+     */
+    @Test
+    void testBlankTimeFails() {
+        raceResult.setTime("");
+
+        Set<ConstraintViolation<RaceResult>> violations =
+                validator.validate(raceResult);
+
+        assertViolation(
+                violations,
+                "time",
+                "Time cannot be blank");
+    }
+
+    /**
+     * Tests that a whitespace-only time fails validation.
+     */
+    @Test
+    void testWhitespaceTimeFails() {
+        raceResult.setTime("   ");
+
+        Set<ConstraintViolation<RaceResult>> violations =
+                validator.validate(raceResult);
+
+        assertViolation(
+                violations,
+                "time",
+                "Time cannot be blank");
+    }
+
+    /**
+     * Tests that negative points fails validation.
+     */
+    @Test
+    void testNegativePointsFails() {
+        raceResult.setPoints(-1);
+
+        Set<ConstraintViolation<RaceResult>> violations =
+                validator.validate(raceResult);
+
+        assertViolation(
+                violations,
+                "points",
+                "Points cannot be negative");
+    }
+
+    /**
      * Tests that a null driver fails validation.
      */
     @Test
     void testNullDriverFails() {
         raceResult.setDriver(null);
-        Set<ConstraintViolation<RaceResult>> violations = validator.validate(raceResult);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<RaceResult>> violations =
+                validator.validate(raceResult);
+
+        assertViolation(
+                violations,
+                "driver",
+                "Driver cannot be null");
     }
 
     /**
@@ -171,7 +238,26 @@ class RaceResultTest {
     @Test
     void testNullRaceFails() {
         raceResult.setRace(null);
-        Set<ConstraintViolation<RaceResult>> violations = validator.validate(raceResult);
-        assertFalse(violations.isEmpty());
+
+        Set<ConstraintViolation<RaceResult>> violations =
+                validator.validate(raceResult);
+
+        assertViolation(
+                violations,
+                "race",
+                "Race cannot be null");
+    }
+
+    /**
+     * Tests that a non-blank time passes validation.
+     */
+    @Test
+    void testValidTimePasses() {
+        raceResult.setTime("1:20:45.123");
+
+        Set<ConstraintViolation<RaceResult>> violations =
+                validator.validate(raceResult);
+
+        assertTrue(violations.isEmpty());
     }
 }

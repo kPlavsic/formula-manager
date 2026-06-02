@@ -29,6 +29,8 @@ public class Team {
 
     /**
      * Name of the team (e.g. "Red Bull Racing").
+     * Invalid values: null, empty string, whitespace-only string,
+     * string shorter than 3 or longer than 100 characters.
      */
     @NotBlank(message = "Team name cannot be blank")
     @Size(min = 3, max = 100, message = "Team name must be between 3 and 100 characters")
@@ -37,6 +39,7 @@ public class Team {
 
     /**
      * Country the team represents.
+     * Invalid values: null, empty string, whitespace-only string.
      */
     @NotBlank(message = "Country cannot be blank")
     @Column(nullable = false)
@@ -44,6 +47,7 @@ public class Team {
 
     /**
      * Annual budget of the team in millions.
+     * Invalid values: negative values.
      */
     @PositiveOrZero(message = "Budget cannot be negative")
     @Column(nullable = false)
@@ -51,6 +55,7 @@ public class Team {
 
     /**
      * Name of the team principal.
+     * Invalid values: null, empty string, whitespace-only string.
      */
     @NotBlank(message = "Team principal cannot be blank")
     @Column(nullable = false)
@@ -58,6 +63,7 @@ public class Team {
 
     /**
      * Year the team was founded.
+     * Invalid values: any value less than 1950.
      */
     @Min(value = 1950, message = "Year of forming cannot be before 1950")
     @Column(nullable = false)
